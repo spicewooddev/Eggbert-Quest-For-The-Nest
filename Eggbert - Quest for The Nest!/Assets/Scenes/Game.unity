@@ -1068,8 +1068,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6326586259950275005, guid: e69448f0a8bebc94f9b93bc67f44cea5, type: 3}
+      propertyPath: m_Constraints
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6326586259950275005, guid: e69448f0a8bebc94f9b93bc67f44cea5, type: 3}
       propertyPath: m_GravityScale
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6326586259950275005, guid: e69448f0a8bebc94f9b93bc67f44cea5, type: 3}
+      propertyPath: m_SleepingMode
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6326586259950275005, guid: e69448f0a8bebc94f9b93bc67f44cea5, type: 3}
       propertyPath: m_CollisionDetection

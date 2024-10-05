@@ -13,12 +13,16 @@ public class Eggbert : MonoBehaviour
     [SerializeField] float gravityScale = 15;
     [SerializeField] float fallGravityScale = 20;
 
-    bool isGrounded = false;
+    bool isGrounded;
+    bool isJumping;
 
     // Start is called before the first frame update
     void Start()
     {
         body = GetComponent<Rigidbody2D>();
+
+        isGrounded = false;
+        isJumping = false;
     }
 
     //For physics, we want to use FixedUpdate() instead of Update().
@@ -33,21 +37,28 @@ public class Eggbert : MonoBehaviour
             body.gravityScale = gravityScale;
             float jumpForce = Mathf.Sqrt(jumpHeight * (Physics2D.gravity.y * body.gravityScale) * -2) * body.mass;
             body.velocity = new Vector2(body.velocity.x, jumpForce);
+
+            isJumping = true;
         }
 
         if (body.velocity.y > 0)
         {
             body.gravityScale = gravityScale;
+            isJumping = true;
         }
         else
         {
             body.gravityScale = fallGravityScale;
+            isJumping = false;
         }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        isGrounded = true;
+        if (!isJumping)
+        {
+            isGrounded = true;
+        }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
