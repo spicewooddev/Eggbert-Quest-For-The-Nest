@@ -14,7 +14,9 @@ public class Eggbert : MonoBehaviour
     [SerializeField] float fallGravityScale = 20;
 
     bool isGrounded;
-    bool isJumping;
+
+    //int jumpCount;
+    //public int maxJumps = 1; //maximum amount of jumps the player can perform
 
     // Start is called before the first frame update
     void Start()
@@ -22,7 +24,7 @@ public class Eggbert : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
 
         isGrounded = false;
-        isJumping = false;
+        //jumpCount = maxJumps;
     }
 
     //For physics, we want to use FixedUpdate() instead of Update().
@@ -31,38 +33,52 @@ public class Eggbert : MonoBehaviour
         //By using GetAxisRaw, the player will hard stop when they release the movement keys, providing them more control
         float horizontalInput = Input.GetAxisRaw("Horizontal");
         body.velocity = new Vector2(horizontalInput * moveSpeed, body.velocity.y);
-  
+
+        PlayerJump();
+    }
+
+    void PlayerJump()
+    {
         if (Input.GetKey("space") && isGrounded)
         {
             body.gravityScale = gravityScale;
             float jumpForce = Mathf.Sqrt(jumpHeight * (Physics2D.gravity.y * body.gravityScale) * -2) * body.mass;
             body.velocity = new Vector2(body.velocity.x, jumpForce);
 
-            isJumping = true;
+            /*
+            if (jumpCount > 0)
+            {
+                jumpCount -= 1;
+            }
+            */
+
+            //isGrounded = false;
         }
 
+        
         if (body.velocity.y > 0)
         {
             body.gravityScale = gravityScale;
-            isJumping = true;
+            isGrounded = false;
         }
         else
         {
             body.gravityScale = fallGravityScale;
-            isJumping = false;
         }
+        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (!isJumping)
+        if (collision.gameObject.tag == "Ground")
         {
             isGrounded = true;
+            //jumpCount = maxJumps;
         }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        isGrounded = false;
+            isGrounded = false;
     }
 }
