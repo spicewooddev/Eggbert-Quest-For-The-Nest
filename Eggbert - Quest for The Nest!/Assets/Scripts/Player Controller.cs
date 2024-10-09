@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class Eggbert : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D body;
 
@@ -14,17 +13,23 @@ public class Eggbert : MonoBehaviour
     [SerializeField] float fallGravityScale = 20;
 
     bool isGrounded;
+    bool isJumping;
 
-    //int jumpCount;
-    //public int maxJumps = 1; //maximum amount of jumps the player can perform
-
-    // Start is called before the first frame update
     void Start()
     {
         body = GetComponent<Rigidbody2D>();
 
         isGrounded = false;
-        //jumpCount = maxJumps;
+        isJumping = false;
+    }
+
+    //Player inputs go here
+    private void Update()
+    {
+        if (Input.GetKeyDown("space"))
+        {
+            isJumping = true;
+        }
     }
 
     //For physics, we want to use FixedUpdate() instead of Update().
@@ -34,51 +39,46 @@ public class Eggbert : MonoBehaviour
         float horizontalInput = Input.GetAxisRaw("Horizontal");
         body.velocity = new Vector2(horizontalInput * moveSpeed, body.velocity.y);
 
-        PlayerJump();
-    }
-
-    void PlayerJump()
-    {
-        if (Input.GetKey("space") && isGrounded)
+        if (isJumping && isGrounded)
         {
-            body.gravityScale = gravityScale;
-            float jumpForce = Mathf.Sqrt(jumpHeight * (Physics2D.gravity.y * body.gravityScale) * -2) * body.mass;
-            body.velocity = new Vector2(body.velocity.x, jumpForce);
-
-            /*
-            if (jumpCount > 0)
-            {
-                jumpCount -= 1;
-            }
-            */
-
-            //isGrounded = false;
+            PlayerJump();
         }
 
-        
         if (body.velocity.y > 0)
         {
             body.gravityScale = gravityScale;
-            isGrounded = false;
         }
         else
         {
             body.gravityScale = fallGravityScale;
         }
-        
     }
 
+    void PlayerJump()
+    {
+        body.gravityScale = gravityScale;
+        float jumpForce = Mathf.Sqrt(jumpHeight * (Physics2D.gravity.y * body.gravityScale) * -2) * body.mass;
+        body.velocity = new Vector2(body.velocity.x, jumpForce);
+
+        //Commenting isGrounded out because this can cause a problem
+        //if the player were to jump and an obstacle were above them
+
+        //isGrounded = false;
+        isJumping = false;
+    }
+
+    
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Ground")
         {
             isGrounded = true;
-            //jumpCount = maxJumps;
         }
+        
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-            isGrounded = false;
+        isGrounded = false;
     }
 }
