@@ -579,7 +579,7 @@ GameObject:
   - component: {fileID: 1631792590}
   m_Layer: 0
   m_Name: Floor
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1062,26 +1062,6 @@ PrefabInstance:
     - target: {fileID: 4796270899296916178, guid: e69448f0a8bebc94f9b93bc67f44cea5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6326586259950275005, guid: e69448f0a8bebc94f9b93bc67f44cea5, type: 3}
-      propertyPath: m_BodyType
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6326586259950275005, guid: e69448f0a8bebc94f9b93bc67f44cea5, type: 3}
-      propertyPath: m_Constraints
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 6326586259950275005, guid: e69448f0a8bebc94f9b93bc67f44cea5, type: 3}
-      propertyPath: m_GravityScale
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6326586259950275005, guid: e69448f0a8bebc94f9b93bc67f44cea5, type: 3}
-      propertyPath: m_SleepingMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6326586259950275005, guid: e69448f0a8bebc94f9b93bc67f44cea5, type: 3}
-      propertyPath: m_CollisionDetection
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
