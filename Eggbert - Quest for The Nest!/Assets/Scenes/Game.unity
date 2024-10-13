@@ -577,7 +577,7 @@ GameObject:
   - component: {fileID: 1631792588}
   - component: {fileID: 1631792587}
   - component: {fileID: 1631792590}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Floor
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -1019,6 +1019,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1870559904443951444, guid: e69448f0a8bebc94f9b93bc67f44cea5, type: 3}
+      propertyPath: m_Size.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1870559904443951444, guid: e69448f0a8bebc94f9b93bc67f44cea5, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1870559904443951444, guid: e69448f0a8bebc94f9b93bc67f44cea5, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1870559904443951444, guid: e69448f0a8bebc94f9b93bc67f44cea5, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 1870559904443951444, guid: e69448f0a8bebc94f9b93bc67f44cea5, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2552561122705237548, guid: e69448f0a8bebc94f9b93bc67f44cea5, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2552561122705237548, guid: e69448f0a8bebc94f9b93bc67f44cea5, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2731108960361142901, guid: e69448f0a8bebc94f9b93bc67f44cea5, type: 3}
       propertyPath: m_Name
       value: Eggbert
@@ -1063,6 +1091,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6326586259950275005, guid: e69448f0a8bebc94f9b93bc67f44cea5, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 6200000, guid: 660b1b4210f85734c9264ce622f53209, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1127,6 +1159,10 @@ PrefabInstance:
     - target: {fileID: 8826465244390508873, guid: 450ce1e2576e0f24d814a54eae3373fe, type: 3}
       propertyPath: m_Name
       value: Platform
+      objectReference: {fileID: 0}
+    - target: {fileID: 8826465244390508873, guid: 450ce1e2576e0f24d814a54eae3373fe, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

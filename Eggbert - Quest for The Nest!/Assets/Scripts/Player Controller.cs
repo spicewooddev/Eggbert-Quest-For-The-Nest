@@ -5,6 +5,9 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D body;
+    private BoxCollider2D bodyCollider;
+
+    [SerializeField] private LayerMask groundLayer;
 
     [SerializeField] float moveSpeed = 10;
 
@@ -12,14 +15,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float gravityScale = 15;
     [SerializeField] float fallGravityScale = 20;
 
-    bool isGrounded;
     bool isJumping;
 
     void Start()
     {
         body = GetComponent<Rigidbody2D>();
+        bodyCollider = GetComponent<BoxCollider2D>();
 
-        isGrounded = false;
         isJumping = false;
     }
 
@@ -39,7 +41,7 @@ public class PlayerController : MonoBehaviour
         float horizontalInput = Input.GetAxisRaw("Horizontal");
         body.velocity = new Vector2(horizontalInput * moveSpeed, body.velocity.y);
 
-        if (isJumping && isGrounded)
+        if (isJumping && IsGrounded())
         {
             PlayerJump();
         }
@@ -60,25 +62,13 @@ public class PlayerController : MonoBehaviour
         float jumpForce = Mathf.Sqrt(jumpHeight * (Physics2D.gravity.y * body.gravityScale) * -2) * body.mass;
         body.velocity = new Vector2(body.velocity.x, jumpForce);
 
-        //Commenting isGrounded out because this can cause a problem
-        //if the player were to jump and an obstacle were above them
-
-        //isGrounded = false;
         isJumping = false;
     }
 
-    
-    private void OnCollisionEnter2D(Collision2D collision)
+    private bool IsGrounded()
     {
-        if (collision.gameObject.tag == "Ground")
-        {
-            isGrounded = true;
-        }
-        
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        isGrounded = false;
+        //the vector added to the bodyCollider.bounds.size makes Coyote time possible
+        RaycastHit2D feetRaycast = Physics2D.BoxCast(bodyCollider.bounds.center, bodyCollider.bounds.size + new Vector3(0.2f, 0), 0, Vector2.down, 0.1f, groundLayer);
+        return feetRaycast.collider != null;
     }
 }
