@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour
     private bool IsGrounded()
     {
         //the vector added to the bodyCollider.bounds.size makes Coyote time possible
-        RaycastHit2D feetRaycast = Physics2D.BoxCast(bodyCollider.bounds.center, bodyCollider.bounds.size + new Vector3(0.2f, 0), 0, Vector2.down, 0.1f, groundLayer);
+        RaycastHit2D feetRaycast = Physics2D.BoxCast(bodyCollider.bounds.center, bodyCollider.bounds.size, 0, Vector2.down, 0.1f, groundLayer);
         return feetRaycast.collider != null;
     }
 }
