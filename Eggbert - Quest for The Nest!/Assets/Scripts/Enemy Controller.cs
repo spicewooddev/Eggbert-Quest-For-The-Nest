@@ -1,64 +1,106 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    public State currentState = State.Idle;
+    Transform player;
+    bool isPlayerDetected;
 
-    GameObject player;
+    Vector3 spawnPosition;
     [SerializeField] float movementSpeed = 3;
 
-    float sightRange = 10f;
+    private bool canAttack = false;
+    private bool isSearching = false;
 
-    float distanceToPlayer;
-    Vector3 startingPoint;
+    public State currentState = State.Idle;
 
-    //we won't worry about the direction or angle just yet.
-    Vector2 direction;
-    float angle;
+    [System.Serializable]
+    public enum State { Idle, Attack, Searching, Return }
 
     private void Awake()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-        startingPoint = transform.position;
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+        isPlayerDetected = GetComponent<EnemyDetector>().enemyControllerCheck;
+        spawnPosition = transform.position;
     }
 
     void Update()
     {
-        distanceToPlayer = Vector2.Distance(transform.position, player.transform.position);
-
         /*
-        direction = player.transform.position - transform.position;
-        direction.Normalize();
-        angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        if (currentState != State.Idle)
+        {
+            
+        }
         */
 
         switch (currentState)
         {
             case State.Idle:
                 //Default path
-                //Ant is meant to walk back and forth in a designated path
-                if (distanceToPlayer <= sightRange)
+
+                //TO DO:
+                //Ant is meant to walk back and forth in a designated path. haven't coded this yet
+                Debug.Log(isPlayerDetected);
+                if (isPlayerDetected)
                 {
                     currentState = State.Attack;
                 }
                 break;
 
             case State.Attack:
+                canAttack = true;
                 //When the player is within the Ant's range of sight, the ant will follow the player
                 //The ant will try to touch the player in an attempt to damage the player
-                if (distanceToPlayer > sightRange)
+                if (isPlayerDetected)
                 {
+                    Debug.Log("Enemy has sighted Player!");
+                    canAttack = true;
+                }
+                else
+                {
+                    canAttack = false;
+                    isSearching = true;
+
+                    Invoke(nameof(State.Searching), 3.0f);
+
                     currentState = State.Return;
                 }
                 break;
 
-            case State.Return:
-                //Ant will return to where they were before detecting the player
-                if (transform.position == startingPoint)
+            case State.Searching:
+                canAttack = false;
+                //Enemy is going to stand still for a couple of seconds to check if the player is still nearby
+                //If the player does not re-enter the enemy's line of sight, they will return to where they were prior
+                //To the player first encountering them.
+                if (isSearching)
                 {
-                    currentState = State.Idle;
+                    Debug.Log("Enemy is Searching for Player!");
+                    if (isPlayerDetected)
+                    {
+                        isSearching = false;
+                        currentState = State.Attack;
+                    }
+                }
+                break;
+
+            case State.Return:
+                canAttack = false;
+                isSearching = false;
+                //Ant will return to where they were before detecting the player
+                if (isPlayerDetected)
+                {
+                    currentState = State.Attack;
+                }
+                else
+                {
+                    Debug.Log("Enemy is now Returning to Start Position!");
+                    if (transform.position == spawnPosition)
+                    {
+                        currentState = State.Idle;
+                        Debug.Log("Enemy is now Idle again!");
+                    }
                 }
                 break;
         }
@@ -66,18 +108,21 @@ public class EnemyController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (currentState == State.Attack)
+        if (isPlayerDetected)
         {
-            transform.position = Vector2.MoveTowards(this.transform.position, player.transform.position, movementSpeed * Time.deltaTime);
-            //transform.rotation = Quaternion.Euler(Vector3.forward * angle);
+            if (transform.position.x < player.position.x)
+            {
+                transform.position = Vector2.MoveTowards(this.transform.position, player.position, -movementSpeed * Time.deltaTime);
+            }
+            else
+            {
+                transform.position = Vector2.MoveTowards(this.transform.position, player.position, movementSpeed * Time.deltaTime);
+            }
         }
 
-        else if (currentState == State.Return)
+        if (currentState == State.Return && !canAttack)
         {
-            transform.position = Vector2.MoveTowards(this.transform.position, startingPoint, movementSpeed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(this.transform.position, spawnPosition, movementSpeed * Time.deltaTime);
         }
     }
 }
-
-[System.Serializable]
-public enum State { Idle, Attack, Return }
