@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -11,8 +12,7 @@ public class EnemyController : MonoBehaviour
     Vector3 spawnPosition;
     [SerializeField] float movementSpeed = 3;
 
-    private bool canAttack = false;
-    private bool isSearching = false;
+    [SerializeField] float searchTime = 3;
 
     public State currentState = State.Idle;
 
@@ -22,18 +22,12 @@ public class EnemyController : MonoBehaviour
     private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        isPlayerDetected = GetComponent<EnemyDetector>().enemyControllerCheck;
         spawnPosition = transform.position;
     }
 
     void Update()
     {
-        /*
-        if (currentState != State.Idle)
-        {
-            
-        }
-        */
+        isPlayerDetected = gameObject.GetComponent<EnemyDetector>().PlayerDetected;
 
         switch (currentState)
         {
@@ -42,7 +36,6 @@ public class EnemyController : MonoBehaviour
 
                 //TO DO:
                 //Ant is meant to walk back and forth in a designated path. haven't coded this yet
-                Debug.Log(isPlayerDetected);
                 if (isPlayerDetected)
                 {
                     currentState = State.Attack;
@@ -50,44 +43,44 @@ public class EnemyController : MonoBehaviour
                 break;
 
             case State.Attack:
-                canAttack = true;
                 //When the player is within the Ant's range of sight, the ant will follow the player
                 //The ant will try to touch the player in an attempt to damage the player
+                searchTime = 3;
                 if (isPlayerDetected)
                 {
-                    Debug.Log("Enemy has sighted Player!");
-                    canAttack = true;
+                    //TO DO:
+                    //if enemy collision and player collision touch
+                    //AND player is not attacking, player takes damage
                 }
                 else
                 {
-                    canAttack = false;
-                    isSearching = true;
 
-                    Invoke(nameof(State.Searching), 3.0f);
-
-                    currentState = State.Return;
+                    currentState = State.Searching;
                 }
                 break;
 
             case State.Searching:
-                canAttack = false;
                 //Enemy is going to stand still for a couple of seconds to check if the player is still nearby
                 //If the player does not re-enter the enemy's line of sight, they will return to where they were prior
                 //To the player first encountering them.
-                if (isSearching)
+                if (searchTime > 0)
                 {
-                    Debug.Log("Enemy is Searching for Player!");
                     if (isPlayerDetected)
                     {
-                        isSearching = false;
                         currentState = State.Attack;
                     }
+
+                    searchTime -= Time.deltaTime;
+                }
+                else
+                {
+                    currentState = State.Return;
                 }
                 break;
 
             case State.Return:
-                canAttack = false;
-                isSearching = false;
+                searchTime = 3;
+
                 //Ant will return to where they were before detecting the player
                 if (isPlayerDetected)
                 {
@@ -95,11 +88,9 @@ public class EnemyController : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("Enemy is now Returning to Start Position!");
                     if (transform.position == spawnPosition)
                     {
                         currentState = State.Idle;
-                        Debug.Log("Enemy is now Idle again!");
                     }
                 }
                 break;
@@ -110,17 +101,22 @@ public class EnemyController : MonoBehaviour
     {
         if (isPlayerDetected)
         {
+            //TO DO:
+            //once i actually make a spritesheet for the enemies,
+            //we can use transform.localScale here to flip the sprites towards the player
             if (transform.position.x < player.position.x)
             {
-                transform.position = Vector2.MoveTowards(this.transform.position, player.position, -movementSpeed * Time.deltaTime);
+                
             }
             else
             {
-                transform.position = Vector2.MoveTowards(this.transform.position, player.position, movementSpeed * Time.deltaTime);
+                
             }
+
+            transform.position = Vector2.MoveTowards(this.transform.position, player.position, movementSpeed * Time.deltaTime);
         }
 
-        if (currentState == State.Return && !canAttack)
+        if (currentState == State.Return)
         {
             transform.position = Vector2.MoveTowards(this.transform.position, spawnPosition, movementSpeed * Time.deltaTime);
         }

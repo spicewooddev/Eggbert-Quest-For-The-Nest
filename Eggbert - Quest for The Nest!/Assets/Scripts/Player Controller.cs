@@ -9,11 +9,13 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private LayerMask groundLayer;
 
-    [SerializeField] float moveSpeed = 10;
+    [Header("Movement Parameters")]
+    public float moveSpeed;
 
-    private float jumpHeight = 5;
-    [SerializeField] float gravityScale = 15;
-    [SerializeField] float fallGravityScale = 20;
+    [Header("Jump Physics Parameters")]
+    public float jumpHeight;
+    public float gravityScale;
+    public float fallGravityScale;
 
     bool isJumping;
 

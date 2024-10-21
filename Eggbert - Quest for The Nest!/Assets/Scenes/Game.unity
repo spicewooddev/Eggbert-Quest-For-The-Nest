@@ -1072,6 +1072,10 @@ PrefabInstance:
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5672651270074675643, guid: 6156b962700319b438baeff0e5d49c5e, type: 3}
+      propertyPath: jumpHeight
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5672651270074675643, guid: 6156b962700319b438baeff0e5d49c5e, type: 3}
       propertyPath: gravityScale
       value: 12
       objectReference: {fileID: 0}

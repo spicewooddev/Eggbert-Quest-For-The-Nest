@@ -29,8 +29,6 @@ public class EnemyDetector : MonoBehaviour
 
     private GameObject target;
 
-    public bool enemyControllerCheck = false;
-
     public GameObject Target
     {
         get => target;
@@ -62,12 +60,10 @@ public class EnemyDetector : MonoBehaviour
         if (collider != null)
         {
             Target = collider.gameObject;
-            enemyControllerCheck = true;
         }
         else
         {
             Target = null;
-            enemyControllerCheck = false;
         }
     }
 
