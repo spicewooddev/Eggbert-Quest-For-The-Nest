@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-//from this video:
-//https://www.youtube.com/watch?v=uOobLo2y3KI
+//from this video: https://www.youtube.com/watch?v=uOobLo2y3KI
 
 public class EnemyDetector : MonoBehaviour
 {
