@@ -1252,6 +1252,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 3
+  leftmostPosition: 10
+  rightmostPosition: 10
+  searchTime: 3
   currentState: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

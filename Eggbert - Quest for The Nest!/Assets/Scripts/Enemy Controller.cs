@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+//pathing from here: https://www.youtube.com/watch?v=RuvfOl8HhhM
+
 public class EnemyController : MonoBehaviour
 {
     Transform player;
@@ -11,6 +13,12 @@ public class EnemyController : MonoBehaviour
 
     Vector3 spawnPosition;
     [SerializeField] float movementSpeed = 3;
+
+    Vector3 currentDestination;
+    Vector3 leftmostPath;
+    Vector3 rightmostPath;
+    [SerializeField] float leftmostPosition;
+    [SerializeField] float rightmostPosition;
 
     [SerializeField] float searchTime = 3;
 
@@ -22,7 +30,12 @@ public class EnemyController : MonoBehaviour
     private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
+
         spawnPosition = transform.position;
+        leftmostPath = new Vector3(spawnPosition.x - leftmostPosition, spawnPosition.y, spawnPosition.z);
+        rightmostPath = new Vector3(spawnPosition.x + rightmostPosition, spawnPosition.y, spawnPosition.z);
+
+        currentDestination = rightmostPath;
     }
 
     void Update()
@@ -36,6 +49,7 @@ public class EnemyController : MonoBehaviour
 
                 //TO DO:
                 //Ant is meant to walk back and forth in a designated path. haven't coded this yet
+
                 if (isPlayerDetected)
                 {
                     currentState = State.Attack;
@@ -113,12 +127,41 @@ public class EnemyController : MonoBehaviour
                 
             }
 
-            transform.position = Vector2.MoveTowards(this.transform.position, player.position, movementSpeed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, player.position, movementSpeed * Time.deltaTime);
+        }
+
+        if (currentState == State.Idle)
+        {
+            Vector2 point = currentDestination - transform.position;
+
+            if (point.x == rightmostPath.x)
+            {
+                Debug.Log("Moving towards leftmost path!");
+                Vector2.MoveTowards(transform.position, leftmostPath, movementSpeed * Time.deltaTime);
+            }
+            else
+            {
+                Debug.Log("Moving towards rightmost path!");
+                Vector2.MoveTowards(transform.position, rightmostPath, movementSpeed * Time.deltaTime);
+            }
+
+
+            if (Vector2.Distance(transform.position, point) < 1 && currentDestination == rightmostPath)
+            {
+                Debug.Log("Changing destination to leftmost path!");
+                currentDestination = leftmostPath;
+            }
+
+            if (Vector2.Distance(transform.position, point) < 1 && currentDestination == leftmostPath) 
+            {
+                Debug.Log("Changing destination to rightmost path!");
+                currentDestination = rightmostPath;
+            }
         }
 
         if (currentState == State.Return)
         {
-            transform.position = Vector2.MoveTowards(this.transform.position, spawnPosition, movementSpeed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, spawnPosition, movementSpeed * Time.deltaTime);
         }
     }
 }
