@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+//pathing from here: https://www.youtube.com/watch?v=RuvfOl8HhhM
+
 public class EnemyController : MonoBehaviour
 {
     Transform player;
@@ -11,6 +13,12 @@ public class EnemyController : MonoBehaviour
 
     Vector3 spawnPosition;
     [SerializeField] float movementSpeed = 3;
+
+    Vector3 desiredDestination;
+    Vector3 leftmostPath;
+    Vector3 rightmostPath;
+    [SerializeField] float leftmostPosition;
+    [SerializeField] float rightmostPosition;
 
     [SerializeField] float searchTime = 3;
 
@@ -22,7 +30,12 @@ public class EnemyController : MonoBehaviour
     private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
+
         spawnPosition = transform.position;
+        leftmostPath = new Vector3(spawnPosition.x - leftmostPosition, spawnPosition.y, spawnPosition.z);
+        rightmostPath = new Vector3(spawnPosition.x + rightmostPosition, spawnPosition.y, spawnPosition.z);
+
+        desiredDestination = rightmostPath;
     }
 
     void Update()
@@ -33,9 +46,6 @@ public class EnemyController : MonoBehaviour
         {
             case State.Idle:
                 //Default path
-
-                //TO DO:
-                //Ant is meant to walk back and forth in a designated path. haven't coded this yet
                 if (isPlayerDetected)
                 {
                     currentState = State.Attack;
@@ -54,7 +64,6 @@ public class EnemyController : MonoBehaviour
                 }
                 else
                 {
-
                     currentState = State.Searching;
                 }
                 break;
@@ -113,12 +122,35 @@ public class EnemyController : MonoBehaviour
                 
             }
 
-            transform.position = Vector2.MoveTowards(this.transform.position, player.position, movementSpeed * Time.deltaTime);
+            this.transform.position = Vector2.MoveTowards(transform.position, player.position, movementSpeed * Time.deltaTime);
+        }
+
+        if (currentState == State.Idle)
+        {
+            if (desiredDestination == leftmostPath)
+            {
+                this.transform.position = Vector2.MoveTowards(transform.position, leftmostPath, movementSpeed * Time.deltaTime);
+            }
+            else
+            {
+                this.transform.position = Vector2.MoveTowards(transform.position, rightmostPath, movementSpeed * Time.deltaTime);
+            }
+
+
+            if (Vector2.Distance(transform.position, desiredDestination) < 1 && desiredDestination == rightmostPath)
+            {
+                desiredDestination = leftmostPath;
+            }
+
+            if (Vector2.Distance(transform.position, desiredDestination) < 1 && desiredDestination == leftmostPath) 
+            {
+                desiredDestination = rightmostPath;
+            }
         }
 
         if (currentState == State.Return)
         {
-            transform.position = Vector2.MoveTowards(this.transform.position, spawnPosition, movementSpeed * Time.deltaTime);
+            this.transform.position = Vector2.MoveTowards(transform.position, spawnPosition, movementSpeed * Time.deltaTime);
         }
     }
 }
