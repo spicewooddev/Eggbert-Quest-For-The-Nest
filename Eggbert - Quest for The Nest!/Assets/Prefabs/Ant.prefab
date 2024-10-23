@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 413238910951005862}
   - component: {fileID: -877683902702796290}
   - component: {fileID: 6482859844653365624}
+  - component: {fileID: 5464243185768787062}
   m_Layer: 0
   m_Name: Ant
   m_TagString: Untagged
@@ -32,8 +33,7 @@ Transform:
   m_LocalPosition: {x: 3, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 5676496249477079740}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &278202896064293569
@@ -174,43 +174,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <PlayerDetected>k__BackingField: 0
   detectorOrigin: {fileID: 7741931302327378561}
-  detectorSize: {x: 10, y: 6}
+  detectorSize: {x: 14, y: 8}
   detectorOriginOffset: {x: 0, y: 0}
   detectionDelay: 0.3
   detectorLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   gizmoIdleColor: {r: 0, g: 1, b: 0, a: 0.19607843}
   gizmoDetectedColor: {r: 1, g: 0, b: 0, a: 0.19607843}
   showGizmos: 1
---- !u!1 &8421095687201469869
-GameObject:
+--- !u!114 &5464243185768787062
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5676496249477079740}
-  m_Layer: 0
-  m_Name: CastPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5676496249477079740
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8421095687201469869}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7741931302327378561}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_GameObject: {fileID: 7794093849646586782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5efc1d6731c59244af17cb204bdba07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movementSpeed: 3
+  leftmostPosition: 10
+  rightmostPosition: 10
+  searchTime: 3
+  currentState: 0
