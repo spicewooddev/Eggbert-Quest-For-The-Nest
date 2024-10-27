@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -8,6 +9,10 @@ public class PlayerController : MonoBehaviour
     private BoxCollider2D bodyCollider;
 
     [SerializeField] private LayerMask groundLayer;
+
+    [Header("Health Parameters")]
+    [SerializeField] private float startingHealth;
+    public float currentHealth { get; private set; }
 
     [Header("Movement Parameters")]
     public float moveSpeed;
@@ -18,6 +23,11 @@ public class PlayerController : MonoBehaviour
     public float fallGravityScale;
 
     bool isJumping;
+
+    private void Awake()
+    {
+        currentHealth = startingHealth;
+    }
 
     void Start()
     {
@@ -72,5 +82,20 @@ public class PlayerController : MonoBehaviour
         //the vector added to the bodyCollider.bounds.size makes Coyote time possible
         RaycastHit2D feetRaycast = Physics2D.BoxCast(bodyCollider.bounds.center, bodyCollider.bounds.size, 0, Vector2.down, 0.1f, groundLayer);
         return feetRaycast.collider != null;
+    }
+
+    public void TakeDamage(float damageTaken)
+    {
+        currentHealth = Mathf.Clamp(currentHealth - damageTaken, 0, startingHealth);
+
+        if (currentHealth > 0)
+        {
+            //player took damage, but is still alive
+            //set iframes
+        }
+        else
+        {
+            //player lost all their lives
+        }
     }
 }
