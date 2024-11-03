@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
     //Player inputs go here
     private void Update()
     {
-        if (Input.GetKeyDown("space"))
+        if (Input.GetKeyDown("space") && IsGrounded())
         {
             isJumping = true;
         }
@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
         float horizontalInput = Input.GetAxisRaw("Horizontal");
         body.velocity = new Vector2(horizontalInput * moveSpeed, body.velocity.y);
 
-        if (isJumping && IsGrounded())
+        if (isJumping)
         {
             PlayerJump();
         }
@@ -82,6 +82,13 @@ public class PlayerController : MonoBehaviour
         //the vector added to the bodyCollider.bounds.size makes Coyote time possible
         RaycastHit2D feetRaycast = Physics2D.BoxCast(bodyCollider.bounds.center, bodyCollider.bounds.size, 0, Vector2.down, 0.1f, groundLayer);
         return feetRaycast.collider != null;
+    }
+    
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.tag == "Enemy" ) {
+            TakeDamage(0.1f);
+        }
     }
 
     public void TakeDamage(float damageTaken)
