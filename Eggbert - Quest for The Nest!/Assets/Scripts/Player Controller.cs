@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -8,6 +9,10 @@ public class PlayerController : MonoBehaviour
     private BoxCollider2D bodyCollider;
 
     [SerializeField] private LayerMask groundLayer;
+
+    [Header("Health Parameters")]
+    [SerializeField] private float startingHealth;
+    public float currentHealth { get; private set; }
 
     [Header("Movement Parameters")]
     public float moveSpeed;
@@ -18,6 +23,11 @@ public class PlayerController : MonoBehaviour
     public float fallGravityScale;
 
     bool isJumping;
+
+    private void Awake()
+    {
+        currentHealth = startingHealth;
+    }
 
     void Start()
     {
@@ -30,7 +40,7 @@ public class PlayerController : MonoBehaviour
     //Player inputs go here
     private void Update()
     {
-        if (Input.GetKeyDown("space"))
+        if (Input.GetKeyDown("space") && IsGrounded())
         {
             isJumping = true;
         }
@@ -43,7 +53,7 @@ public class PlayerController : MonoBehaviour
         float horizontalInput = Input.GetAxisRaw("Horizontal");
         body.velocity = new Vector2(horizontalInput * moveSpeed, body.velocity.y);
 
-        if (isJumping && IsGrounded())
+        if (isJumping)
         {
             PlayerJump();
         }
@@ -72,5 +82,27 @@ public class PlayerController : MonoBehaviour
         //the vector added to the bodyCollider.bounds.size makes Coyote time possible
         RaycastHit2D feetRaycast = Physics2D.BoxCast(bodyCollider.bounds.center, bodyCollider.bounds.size, 0, Vector2.down, 0.1f, groundLayer);
         return feetRaycast.collider != null;
+    }
+    
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.tag == "Enemy" ) {
+            TakeDamage(0.1f);
+        }
+    }
+
+    public void TakeDamage(float damageTaken)
+    {
+        currentHealth = Mathf.Clamp(currentHealth - damageTaken, 0, startingHealth);
+
+        if (currentHealth > 0)
+        {
+            //player took damage, but is still alive
+            //set iframes
+        }
+        else
+        {
+            //player lost all their lives
+        }
     }
 }
